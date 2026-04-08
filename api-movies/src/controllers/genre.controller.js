@@ -1,29 +1,77 @@
 import Genre from '../service/genre.js'
 
 export const getAllGenres = async (req, res) => {
-  const data = await Genre.getAll()
-  res.json({ status: 'success', data })
+  try {
+    const data = await Genre.getAll()
+    res.json({ status: 'success', data })
+  } catch (e) {
+    res.status(500).json({ status: 'error', message: e.message })
+  }
 }
 
 export const getGenreById = async (req, res) => {
-  const [genre] = await Genre.find(req.params.id)
-  if (!genre) return res.status(404).json({ message: 'Genre no encontrado' })
-  res.json({ status: 'success', data: genre })
+  try {
+    const [genre] = await Genre.find(req.params.id)
+
+    if (!genre)
+      return res.status(404).json({ status: 'error', message: 'Genre no encontrado' })
+
+    res.json({ status: 'success', data: genre })
+  } catch (e) {
+    res.status(500).json({ status: 'error', message: e.message })
+  }
 }
 
 export const createGenre = async (req, res) => {
-  const data = await Genre.create(req.body)
-  res.status(201).json({ status: 'success', data })
+  try {
+    if (!req.body.name)
+      return res.status(400).json({ status: 'error', message: 'name requerido' })
+
+    const data = await Genre.create(req.body)
+    res.status(201).json({ status: 'success', data })
+  } catch (e) {
+    res.status(500).json({ status: 'error', message: e.message })
+  }
 }
 
 export const updateGenre = async (req, res) => {
-  const [genre] = await Genre.find(req.params.id)
-  if (!genre) return res.status(404).json({ message: 'Genre no encontrado' })
-  const data = await Genre.update(req.params.id, req.body)
-  res.json({ status: 'success', data })
+  try {
+    const id = req.params.id
+
+    const [genre] = await Genre.find(id)
+    if (!genre)
+      return res.status(404).json({ status: 'error', message: 'Genero no encontrado' })
+
+    if (!req.body.name)
+      return res.status(400).json({ status: 'error', message: 'nombre requerido' })
+
+    const data = await Genre.update(id, req.body)
+
+    res.json({
+      status: 'success',
+      message: 'Genre actualizado',
+      data
+    })
+  } catch (e) {
+    res.status(500).json({ status: 'error', message: e.message })
+  }
 }
 
 export const deleteGenre = async (req, res) => {
-  await Genre.delete(req.params.id)
-  res.json({ status: 'success', message: 'Genre eliminado' })
+  try {
+    const id = req.params.id
+
+    const [genre] = await Genre.find(id)
+    if (!genre)
+      return res.status(404).json({ status: 'error', message: 'Genero no encontrado' })
+
+    await Genre.delete(id)
+
+    res.json({
+      status: 'success',
+      message: 'Genero eliminado'
+    })
+  } catch (e) {
+    res.status(500).json({ status: 'error', message: e.message })
+  }
 }

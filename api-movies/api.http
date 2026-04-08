@@ -1,13 +1,26 @@
+### login de usuario 
+POST http://localhost:3000/auth/login
+Content-Type:   application/json
+
+{
+    "username": "profesor",
+    "password": "hash_falso_123"
+}
+
+
+
+
 ### consultar todas las peliculas
 GET http://localhost:3000/movies
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsImlhdCI6MTc3NDQ4MTkwOCwiZXhwIjoxNzc0NTE3OTA4fQ.uN1a36LaS4FBwagXNugK71872_UfH7nPWfPJwss1jU0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 
 ### consultar una pelicula por id
 GET http://localhost:3000/movies/2
-Authorization: Bearer 23n4kdm2uh234238
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 
 ### crear
 POST http://localhost:3000/movies
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 Content-Type:   application/json
 
 {
@@ -21,25 +34,50 @@ Content-Type:   application/json
 
 ### eliminar
 DELETE http://localhost:3000/movies/1234
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 ### actualizar
-PUT http://localhost:3000/movies/1234
+PUT http://localhost:3000/movies/7
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 Content-Type:   application/json
 
 {
     "title": "The Matrix Reloaded",
-    "director": [4,6]
+    "director": [4,1]
 }
 
 ### eliminar un recurso
 DELETE http://localhost:3000/movies/1234
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 
+###Obtener todos los géneros
+GET http://localhost:3000/genres
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
 
-### login de usuario 
-POST http://localhost:3000/auth/login
-Content-Type:   application/json
+### consultar una genero por id
+GET http://localhost:3000/genres/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
+
+### crear genero
+POST http://localhost:3000/genres
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
+Content-Type: application/json
 
 {
-    "username": "profesor",
-    "password": "hash_falso_123"
+  "name": "Sci-Fi"
 }
+
+###Actualizar genero
+
+PUT http://localhost:3000/genres/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
+Content-Type: application/json
+
+{
+  "name": "Ciencia Ficcion"
+}
+
+###Eliminar genero
+
+DELETE http://localhost:3000/genres/5
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOiJtaWRvbWluaW8uY29tIiwidXNlcm5hbWUiOiJwcm9mZXNvciIsInJvbCI6ImFkbWluIiwiaWF0IjoxNzc1NjMyNzQ5LCJleHAiOjE3NzU2Njg3NDl9._UlRNibdQxm35enmAvwa8v48F8MC7r0IFpV4-Np8iGA
+

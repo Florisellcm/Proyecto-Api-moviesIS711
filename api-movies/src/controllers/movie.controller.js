@@ -48,8 +48,8 @@ export const deleteMovie = async (req, res) => {
   const { id } = req.params
   try {
     const deleted = await Movie.delete(id)
-    if (!deleted) return res.status(404).json({ message: `No existe la película con id=${id}` })
-    res.json({ message: `Película con id=${id} eliminada correctamente` })
+    if (!deleted) return res.status(404).json({ message: `Pelicula no encontrada` })
+    res.json({ message: `Película eliminada correctamente` })
   } catch (err) {
     res.status(500).json({ message: 'Error interno del servidor' })
   }
