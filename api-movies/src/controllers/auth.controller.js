@@ -1,76 +1,33 @@
-import Auth from "../service/auth.js"
-import jwt from 'jsonwebtoken';
+import Auth from '../service/auth.js'
 
 export default class AuthController {
 
+  static login = async (req, res) => {
+    const { username, password } = req.body
 
-    static login = async (req, res) => {
-
-
-        const { username, password } = req.body
-
-        if (!username || !password) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Debe enviar los datos de inicio de sesión'
-            })
-        }
-
-        try {
-
-            const [user] = await Auth.login({ username })
-
-            if (!user) {
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'Credenciales incorrectas'
-                })
-            }
-
-            //validar que la clave sea correcta
-            //TODO: mecanismo de creación de hash de contraseña
-
-            //! IMPOETANTE, ESTO ES TEMPORAL, SE DEBE COMPRAR CON UNA COTRASENIA REAL HASEADA, INTEGRANDO ARGON2 O BCRYPT
-            if (password !== user.password_hash) {
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'Credenciales incorrectas'
-                })
-            }
-
-            // generar el token
-            const dataToken = {
-                issuer: 'midominio.com',
-                username: user.username,
-                rol: 'admin' // user.rol
-            }
-
-            const token = jwt.sign(dataToken, process.env.JWT_SECRET_KEY, {
-                expiresIn: '10h'
-            })
-
-
-            // responder al usuario
-            res.json(
-                {
-                    status: 'success',
-                    message: 'Bienvenido',
-                    data: {
-                        user: user.username,
-                        email: user.email,
-                        token
-                    }
-                }
-            )
-
-
-        } catch {
-
-            return res.status(500).json({
-                status: 'error',
-                message: 'Error al realizar la consulta'
-            })
-        }
+    if (!username || !password) {
+      return res.status(400).json({
+        status: "error",
+        message: "Debe enviar username y password"
+      })
     }
 
+    try {
+      const result = await Auth.login({ username, password })
+
+      res.json({
+        status: "success",
+        message: "Login exitoso",
+        data: result
+      })
+
+    } catch (error) {
+      console.error(error.message)
+
+      return res.status(401).json({
+        status: "error",
+        message: error.message
+      })
+    }
+  }
 }

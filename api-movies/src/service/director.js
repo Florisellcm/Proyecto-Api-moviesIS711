@@ -21,12 +21,14 @@ class Director {
   }
 
   static async update(id, { full_name }) {
-    await pool.query('UPDATE directors SET full_name=? WHERE id=?',[full_name,id])
+    await pool.query('UPDATE directors SET full_name=? WHERE id=?', [full_name, id])
     return { id, full_name }
   }
 
   static async delete(id) {
-    await pool.query('DELETE FROM directors WHERE id=?',[id])
+    const [result] = await pool.query('DELETE FROM directors WHERE id=?', [id])
+    // Retorna true si borró un registro, false si no existía
+    return result.affectedRows > 0
   }
 }
 

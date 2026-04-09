@@ -9,8 +9,8 @@ router.use(isAuth)
 
 router.get('/', hasPermission('movie.read'), getAll)
 router.get('/:id', hasPermission('movie.read'), getById)
-router.post('/', hasPermission('movie.read'),createMovie)     // POST /movies
-router.put('/:id',hasPermission('movie.read'), updateMovie)   // PUT /movies/:id
+router.post('/', hasPermission('movie.read'),createMovie)     
+router.put('/:id',hasPermission('movie.read'), updateMovie)   
 router.delete('/:id', hasPermission('movie.delete'), deleteMovie)
 
 export default router

@@ -1,5 +1,5 @@
 import Movie from '../service/movie.js'
-
+import { validateMovieSchema, validatePartialMovieSchema } from '../schemas/movie.schema.js'
 // GET /movies
 export const getAll = async (req, res) => {
   const movies = await Movie.getAll()
@@ -30,16 +30,14 @@ export const createMovie = async (req, res) => {
 
 // PUT /movies/:id
 export const updateMovie = async (req, res) => {
-  const { id } = req.params
+  const result = validatePartialMovieSchema(req.body)
+  if (!result.success) return res.status(400).json({ status: 'error', errors: result.error.format() })
+
   try {
-    const movie = await Movie.update(id, req.body)
-    res.json({ message: 'Película actualizada', movie })
+    const movie = await Movie.update(req.params.id, result.data)
+    res.json({ status: 'success', data: movie })
   } catch (err) {
-    if (err.message.includes('no existe')) {
-      res.status(404).json({ message: err.message })
-    } else {
-      res.status(400).json({ message: err.message })
-    }
+    res.status(400).json({ status: 'error', message: err.message })
   }
 }
 

@@ -39,93 +39,123 @@ export default class Movie {
 
   // Crear película
   static create = async (movie) => {
-    // Validar géneros
-    if (movie.genre?.length) {
-      const [validGenres] = await pool.query(
-        `SELECT id FROM genres WHERE id IN (?)`, [movie.genre]
-      )
-      const validIds = validGenres.map(g => g.id)
-      const invalid = movie.genre.filter(id => !validIds.includes(id))
-      if (invalid.length) throw new Error(`Género(s) inválido(s): ${invalid.join(', ')}`)
-    }
-
-    // Validar directores
-    if (movie.director?.length) {
-      const [validDirectors] = await pool.query(
-        `SELECT id FROM directors WHERE id IN (?)`, [movie.director]
-      )
-      const validIds = validDirectors.map(d => d.id)
-      const invalid = movie.director.filter(id => !validIds.includes(id))
-      if (invalid.length) throw new Error(`Director(es) inválido(s): ${invalid.join(', ')}`)
-    }
-
-    // Insertar en tabla movies
-    const [result] = await pool.query(
-      `INSERT INTO movies (title, release_year, synopsis, poster_url)
-       VALUES (?, ?, ?, ?)`,
-      [movie.title, movie.release_year, movie.synopsis, movie.poster_url]
-    )
-    const id = result.insertId
-
-    // Insertar relaciones
-    if (movie.genre?.length) {
-      const genreValues = movie.genre.map(gId => [id, gId])
-      await pool.query(`INSERT INTO movie_genres (movie_id, genre_id) VALUES ?`, [genreValues])
-    }
-    if (movie.director?.length) {
-      const directorValues = movie.director.map(dId => [id, dId])
-      await pool.query(`INSERT INTO movie_directors (movie_id, director_id) VALUES ?`, [directorValues])
-    }
-
-    return { id, ...movie }
+  if (!movie) {
+    throw new Error('No se recibieron datos')
   }
 
+  // Validar géneros
+  if (movie.genre?.length) {
+    const placeholders = movie.genre.map(() => '?').join(',')
+    const [validGenres] = await pool.query(
+      `SELECT id FROM genres WHERE id IN (${placeholders})`,
+      movie.genre
+    )
+
+    const validIds = validGenres.map(g => g.id)
+    const invalid = movie.genre.filter(id => !validIds.includes(id))
+
+    if (invalid.length) {
+      throw new Error(`Género(s) inválido(s): ${invalid.join(', ')}`)
+    }
+  }
+
+  // Validar directores
+  if (movie.director?.length) {
+    const placeholders = movie.director.map(() => '?').join(',')
+    const [validDirectors] = await pool.query(
+      `SELECT id FROM directors WHERE id IN (${placeholders})`,
+      movie.director
+    )
+
+    const validIds = validDirectors.map(d => d.id)
+    const invalid = movie.director.filter(id => !validIds.includes(id))
+
+    if (invalid.length) {
+      throw new Error(`Director(es) inválido(s): ${invalid.join(', ')}`)
+    }
+  }
+
+  // Insertar película
+  const [result] = await pool.query(
+    `INSERT INTO movies (title, release_year, synopsis, poster_url)
+     VALUES (?, ?, ?, ?)`,
+    [
+      movie.title,
+      movie.release_year || null,
+      movie.synopsis || null,
+      movie.poster_url || null
+    ]
+  )
+
+  const id = result.insertId
+
+  // Insertar géneros
+  if (movie.genre?.length) {
+    const genreValues = movie.genre.map(gId => [id, gId])
+    await pool.query(
+      `INSERT INTO movie_genres (movie_id, genre_id) VALUES ?`,
+      [genreValues]
+    )
+  }
+
+  // Insertar directores
+  if (movie.director?.length) {
+    const directorValues = movie.director.map(dId => [id, dId])
+    await pool.query(
+      `INSERT INTO movie_directors (movie_id, director_id) VALUES ?`,
+      [directorValues]
+    )
+  }
+
+  return { id, ...movie }
+}
   // Actualizar película
   static update = async (id, movie) => {
-    const existing = await this.find(id)
-    if (!existing.length) throw new Error(`La película con id=${id} no existe`)
+  const existing = await this.find(id)
+  if (!existing.length) throw new Error(`La película no existe`)
+  const current = existing[0]  // datos actuales
 
-    // Validar géneros
-    if (movie.genre?.length) {
-      const [validGenres] = await pool.query(
-        `SELECT id FROM genres WHERE id IN (?)`, [movie.genre]
-      )
-      const validIds = validGenres.map(g => g.id)
-      const invalid = movie.genre.filter(id => !validIds.includes(id))
-      if (invalid.length) throw new Error(`Género(s) inválido(s): ${invalid.join(', ')}`)
-    }
-
-    // Validar directores
-    if (movie.director?.length) {
-      const [validDirectors] = await pool.query(
-        `SELECT id FROM directors WHERE id IN (?)`, [movie.director]
-      )
-      const validIds = validDirectors.map(d => d.id)
-      const invalid = movie.director.filter(id => !validIds.includes(id))
-      if (invalid.length) throw new Error(`Director(es) inválido(s): ${invalid.join(', ')}`)
-    }
-
-    // Actualizar tabla movies
-    await pool.query(
-      `UPDATE movies SET title=?, release_year=?, synopsis=?, poster_url=? WHERE id=?`,
-      [movie.title, movie.release_year, movie.synopsis, movie.poster_url, id]
-    )
-
-    // Actualizar relaciones
-    if (movie.genre?.length) {
-      await pool.query(`DELETE FROM movie_genres WHERE movie_id=?`, [id])
-      const genreValues = movie.genre.map(gId => [id, gId])
-      await pool.query(`INSERT INTO movie_genres (movie_id, genre_id) VALUES ?`, [genreValues])
-    }
-    if (movie.director?.length) {
-      await pool.query(`DELETE FROM movie_directors WHERE movie_id=?`, [id])
-      const directorValues = movie.director.map(dId => [id, dId])
-      await pool.query(`INSERT INTO movie_directors (movie_id, director_id) VALUES ?`, [directorValues])
-    }
-
-    return { id, ...movie }
+  // Validar géneros y directores (si vienen)
+  if (movie.genre?.length) {
+    const [validGenres] = await pool.query(`SELECT id FROM genres WHERE id IN (?)`, [movie.genre])
+    const validIds = validGenres.map(g => g.id)
+    const invalid = movie.genre.filter(id => !validIds.includes(id))
+    if (invalid.length) throw new Error(`Género(s) inválido(s): ${invalid.join(', ')}`)
   }
 
+  if (movie.director?.length) {
+    const [validDirectors] = await pool.query(`SELECT id FROM directors WHERE id IN (?)`, [movie.director])
+    const validIds = validDirectors.map(d => d.id)
+    const invalid = movie.director.filter(id => !validIds.includes(id))
+    if (invalid.length) throw new Error(`Director(es) inválido(s): ${invalid.join(', ')}`)
+  }
+
+  // Actualizar tabla movies solo con los campos que vienen
+  const title = movie.title ?? current.title
+  const release_year = movie.release_year ?? current.release_year
+  const synopsis = movie.synopsis ?? current.synopsis
+  const poster_url = movie.poster_url ?? current.poster_url
+
+  await pool.query(
+    `UPDATE movies SET title=?, release_year=?, synopsis=?, poster_url=? WHERE id=?`,
+    [title, release_year, synopsis, poster_url, id]
+  )
+
+  // Actualizar relaciones
+  if (movie.genre?.length) {
+    await pool.query(`DELETE FROM movie_genres WHERE movie_id=?`, [id])
+    const genreValues = movie.genre.map(gId => [id, gId])
+    await pool.query(`INSERT INTO movie_genres (movie_id, genre_id) VALUES ?`, [genreValues])
+  }
+
+  if (movie.director?.length) {
+    await pool.query(`DELETE FROM movie_directors WHERE movie_id=?`, [id])
+    const directorValues = movie.director.map(dId => [id, dId])
+    await pool.query(`INSERT INTO movie_directors (movie_id, director_id) VALUES ?`, [directorValues])
+  }
+
+  return { id, title, release_year, synopsis, poster_url, genre: movie.genre, director: movie.director }
+}
   // Eliminar película
   static delete = async (id) => {
     const existing = await this.find(id)
