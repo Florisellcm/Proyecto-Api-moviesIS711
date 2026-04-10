@@ -21,12 +21,19 @@ class Genre {
   }
 
   static async update(id, { name }) {
+    const rows = await this.find(id)
+    if (!rows.length) throw new Error('Género no encontrado')
+
     await pool.query('UPDATE genres SET name=? WHERE id=?', [name, id])
     return { id, name }
   }
 
   static async delete(id) {
-    await pool.query('DELETE FROM genres WHERE id=?', [id])
+    const rows = await this.find(id)
+    if (!rows.length) return false
+
+    const [result] = await pool.query('DELETE FROM genres WHERE id=?', [id])
+    return result.affectedRows > 0
   }
 }
 

@@ -17,14 +17,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 ### crear
 POST http://localhost:3000/movies
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJwcm9mZXNvciIsImVtYWlsIjoicHJvZmVzb3JAY2xhc2UuZWR1IiwiaWF0IjoxNzc1NzQ3NDkwLCJleHAiOjE3NzYzNTIyOTB9.lM_VjGjSqPAfPSF5t5Vfd5tbs1K38WBiATgJpEEXM9s
+Content-Type:   application/json
 
 {
     "title": "The Matrix Recargado",
     "director": [2,3],
     "poster_url": "https://m.media-amazon.com/images/I/51EG732BV3L.jpg",
-    "genre": [
-        1
-    ]
+    "genre": [1]
 }
 
 ### actualizar
@@ -33,11 +32,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 Content-Type:   application/json
 
 {
-  "release_year": 2003
+  "title": "The Matrix Reloaded"
 }
 
 ### eliminar 
-DELETE http://localhost:3000/movies/1234
+DELETE http://localhost:3000/movies/18
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJwcm9mZXNvciIsImVtYWlsIjoicHJvZmVzb3JAY2xhc2UuZWR1IiwiaWF0IjoxNzc1NzQ3NDkwLCJleHAiOjE3NzYzNTIyOTB9.lM_VjGjSqPAfPSF5t5Vfd5tbs1K38WBiATgJpEEXM9s
 
 ###Obtener todos los generos
@@ -73,7 +72,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hb
 GET http://localhost:3000/directors
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJwcm9mZXNvciIsImVtYWlsIjoicHJvZmVzb3JAY2xhc2UuZWR1IiwiaWF0IjoxNzc1NzQ3NDkwLCJleHAiOjE3NzYzNTIyOTB9.lM_VjGjSqPAfPSF5t5Vfd5tbs1K38WBiATgJpEEXM9s
 ### consultar una director por id
-GET http://localhost:3000/directors/5
+GET http://localhost:3000/directors/9
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJwcm9mZXNvciIsImVtYWlsIjoicHJvZmVzb3JAY2xhc2UuZWR1IiwiaWF0IjoxNzc1NzQ3NDkwLCJleHAiOjE3NzYzNTIyOTB9.lM_VjGjSqPAfPSF5t5Vfd5tbs1K38WBiATgJpEEXM9s
 ### crear director
 POST http://localhost:3000/directors
@@ -86,7 +85,7 @@ Content-Type: application/json
 
 ###Actualizar director
 
-PUT http://localhost:3000/directors/7
+PUT http://localhost:3000/directors/9
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJwcm9mZXNvciIsImVtYWlsIjoicHJvZmVzb3JAY2xhc2UuZWR1IiwiaWF0IjoxNzc1NzQ3NDkwLCJleHAiOjE3NzYzNTIyOTB9.lM_VjGjSqPAfPSF5t5Vfd5tbs1K38WBiATgJpEEXM9s
 Content-Type: application/json
 

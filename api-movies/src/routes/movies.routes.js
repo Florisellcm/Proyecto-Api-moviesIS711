@@ -1,16 +1,15 @@
 import { Router } from 'express'
 import { getAll, getById, createMovie, updateMovie, deleteMovie } from '../controllers/movie.controller.js'
 import { isAuth } from '../middlewares/isAuth.js'
-import { hasPermission } from '../middlewares/hasPermission.js'
 
 const router = Router()
 
 router.use(isAuth)
 
-router.get('/', hasPermission('movie.read'), getAll)
-router.get('/:id', hasPermission('movie.read'), getById)
-router.post('/', hasPermission('movie.read'),createMovie)     
-router.put('/:id',hasPermission('movie.read'), updateMovie)   
-router.delete('/:id', hasPermission('movie.delete'), deleteMovie)
+router.get('/', getAll)
+router.get('/:id', getById)
+router.post('/', createMovie)
+router.put('/:id', updateMovie)
+router.delete('/:id', deleteMovie)
 
 export default router

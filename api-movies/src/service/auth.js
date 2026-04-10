@@ -24,7 +24,7 @@ class Auth {
       throw new Error("Credenciales incorrectas")
     }
 
-    //  generar JWT (SOLO AQUÍ)
+    //  generar JWT 
     const token = jwt.sign(
       {
         id: user.id,

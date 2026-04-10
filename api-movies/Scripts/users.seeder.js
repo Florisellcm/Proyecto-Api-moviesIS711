@@ -1,4 +1,11 @@
-import {pool   }from '../config/db.js'
+// Seeder de usuarios
+// Crea usuarios de prueba en la base de datos
+// Convierte contraseñas en texto plano a hash con bcrypt
+// Evita duplicados verificando si el usuario ya existe
+// Se ejecuta solo una vez para inicializar la BD
+//
+
+import { pool } from '../src/config/db.js'
 import bcrypt from 'bcrypt'
 
 const users = [
@@ -7,18 +14,40 @@ const users = [
 ]
 
 async function seedUsers() {
-  const saltRounds = 10
+  try {
+    const saltRounds = 10
 
-  for (const user of users) {
-    const hashed = await bcrypt.hash(user.password, saltRounds)
-    await pool.execute(
-      "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
-      [user.username, user.email, hashed]
-    )
-    console.log(`Usuario ${user.username} creado.`)
+    for (const user of users) {
+      // Verificar si el usuario ya existe
+      const [rows] = await pool.execute(
+        "SELECT id FROM users WHERE email = ?",
+        [user.email]
+      )
+
+      if (rows.length > 0) {
+        console.log(` Usuario ${user.email} ya existe, saltando...`)
+        continue
+      }
+
+      // Hashear contraseña
+      const hashedPassword = await bcrypt.hash(user.password, saltRounds)
+
+      // Insertar usuario
+      await pool.execute(
+        "INSERT INTO users (username, email, password_hash) VALUES (?, ?, ?)",
+        [user.username, user.email, hashedPassword]
+      )
+
+      console.log(` Usuario ${user.username} creado correctamente`)
+    }
+
+    console.log("Seed completado")
+    process.exit(0)
+
+  } catch (error) {
+    console.error(" Error en seed:", error)
+    process.exit(1)
   }
-
-  process.exit(0)
 }
 
 seedUsers()
